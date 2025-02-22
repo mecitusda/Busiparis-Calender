@@ -1,0 +1,123 @@
+.calendar-layout {
+  display: flex;
+  gap: 20px;
+  height: calc(100vh - 140px);
+}
+
+.calendar-sidebar {
+  flex: 0 0 300px;
+  display: flex;
+  flex-direction: column;
+  background-color: #f8f9fc;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.calendar-container {
+  flex: 1;
+}
+
+.calendar-header {
+  text-align: center;
+  margin: 15px 0 25px 0;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  background-color: #e8eaf6;
+  border: 1px solid #e0e4f4;
+  border-radius: 8px;
+  padding: 2px;
+}
+
+.calendar-weekday {
+  background-color: #f4f5fc;
+  padding: 10px;
+  text-align: center;
+  font-weight: 500;
+  font-size: 0.9em;
+  color: #5B3FD9;
+}
+
+.calendar-day {
+  background-color: white;
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.calendar-day:hover {
+  background-color: #e8eaf6;
+  color: #5B3FD9;
+}
+
+.calendar-day.empty {
+  background-color: #f8f9fc;
+  cursor: default;
+}
+
+.calendar-day.selected {
+  background-color: #5B3FD9;
+  color: white;
+  font-weight: 500;
+}
+
+.calendar-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  margin: 10px 5px;
+  background-color: #fff;
+  border: 1px solid #e0e4f4;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+}
+
+.calendar-nav button {
+  background-color: #f4f5fc;
+  border: 1px solid #e0e4f4;
+  padding: 6px 12px;
+  cursor: pointer;
+  color: #5B3FD9;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+}
+
+.calendar-nav button:hover {
+  background-color: #5B3FD9;
+  border-color: #5B3FD9;
+  color: white;
+}
+
+.calendar-nav button:active {
+  background-color: #e8f0fe;
+}
+
+.calendar-nav h2 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #5B3FD9;
+  font-weight: 500;
+  padding: 0 16px;
+}
+
+/* Butonları grupla */
+.calendar-nav-buttons {
+  display: flex;
+  gap: 8px;
+} 
