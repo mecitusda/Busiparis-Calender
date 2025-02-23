@@ -147,6 +147,28 @@ const WeekView = ({ selectedDate, appointments, onAppointmentClick }) => {
 
   return (
     <div className="week-view">
+      <div className="status-legend">
+        <div className="legend-item">
+          <span className="legend-color" style={{ backgroundColor: '#5B3FD9' }}></span>
+          <span>Beklemede</span>
+        </div>
+        <div className="legend-item">
+          <span className="legend-color" style={{ backgroundColor: '#1976d2' }}></span>
+          <span>Devam Ediyor</span>
+        </div>
+        <div className="legend-item">
+          <span className="legend-color" style={{ backgroundColor: '#2e7d32' }}></span>
+          <span>Tamamlandı</span>
+        </div>
+        <div className="legend-item">
+          <span className="legend-color" style={{ backgroundColor: '#d32f2f' }}></span>
+          <span>İptal Edildi</span>
+        </div>
+        <div className="legend-item">
+          <span className="legend-color" style={{ backgroundColor: '#ed6c02' }}></span>
+          <span>Gelmedi</span>
+        </div>
+      </div>
       <div className="week-header">
         <div className="time-gutter-header" />
         {getDayDates().map((date, index) => (
