@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './WeekView.css';
 import Popup from './Popup';
 
-const WeekView = ({ selectedDate, appointments }) => {
+const WeekView = ({ selectedDate, appointments, onAppointmentClick }) => {
   const [selectedAppointment, setSelectedAppointment] = useState(null);
 
   const daysToShow = 5;
@@ -45,23 +45,34 @@ const WeekView = ({ selectedDate, appointments }) => {
     return `${day} ${weekday}`;
   };
 
-  const renderAppointmentBlock = (appointments, hour, dates) => {
+  const renderAppointmentBlock = (appointments, hour, date) => {
     if (!appointments || appointments.length === 0) return null;
+
+    const now = new Date();
+    const currentHour = now.getHours();
+    const currentDate = new Date().setHours(0,0,0,0); // Bugünün tarihini saat olmadan al
+
+    // Kontrol edilecek tarihi doğrudan parametre olarak gelen date'i kullan
+    const checkDate = new Date(date);
+    const dayDate = checkDate.setHours(0,0,0,0); // Saat olmadan tarih
+
+    // Geçmiş kontrolü: Ya tarih geçmişte ya da aynı gün ve saat geçmişte
+    const isPast = dayDate < currentDate || (dayDate === currentDate && hour < currentHour);
 
     // Önceki saatlerin toplam yüksekliğini hesapla
     let topPosition = 0;
     for (let h = 8; h < hour; h++) {
-      topPosition += getMaxHeightForHour(h, dates, getAppointmentsForDate);
+      topPosition += getMaxHeightForHour(h, getDayDates(), getAppointmentsForDate);
     }
 
     return (
       <div 
-        className="appointment-block" 
+        className={`appointment-block ${isPast ? 'past' : ''}`}
         style={{ 
           top: `${topPosition}px`
         }}
       >
-        <div className="time-block">
+        <div className={`time-block ${isPast ? 'past' : ''}`}>
           {`${hour.toString().padStart(2, '0')}:00`}
         </div>
         <div className="appointment-list">
@@ -72,7 +83,7 @@ const WeekView = ({ selectedDate, appointments }) => {
             return (
               <button
                 key={index}
-                className="appointment"
+                className={`appointment ${getStatusClass(appointment.status)}`}
                 onClick={() => handleAppointmentClick(appointment)}
               >
                 <span className="appointment-time">{formattedTime}</span>
@@ -116,7 +127,23 @@ const WeekView = ({ selectedDate, appointments }) => {
   };
 
   const handleAppointmentClick = (appointment) => {
-    setSelectedAppointment(appointment);
+    onAppointmentClick(appointment);
+  };
+
+  const getStatusClass = (status) => {
+    switch (status) {
+      case 'Completed':
+        return 'status-completed';
+      case 'onProgress':
+        return 'status-progress';
+      case 'Canceled':
+        return 'status-canceled';
+      case 'No-Show':
+        return 'status-noshow';
+      case 'Pending':
+      default:
+        return 'status-pending';
+    }
   };
 
   return (
@@ -152,7 +179,7 @@ const WeekView = ({ selectedDate, appointments }) => {
               {hours.map(hour => (
                 <React.Fragment key={hour}>
                   {renderTimeSlot(hour, getDayDates(), getAppointmentsForDate)}
-                  {renderAppointmentBlock(getAppointmentsForDate(date)[hour], hour, getDayDates())}
+                  {renderAppointmentBlock(getAppointmentsForDate(date)[hour], hour, date)}
                 </React.Fragment>
               ))}
             </div>

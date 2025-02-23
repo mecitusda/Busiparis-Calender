@@ -46,14 +46,15 @@
 }
 
 .popup-header h3 {
-  margin: 0 0 8px 0;
-  color: #5B3FD9;
+  color: #333;
   font-size: 1.2rem;
+  margin-bottom: 8px;
 }
 
 .popup-time {
   color: #666;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
+  font-weight: 500;
 }
 
 .popup-details {
@@ -71,10 +72,174 @@
 
 .detail-label {
   color: #666;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
+  font-weight: 500;
 }
 
 .detail-value {
   color: #333;
+  font-size: 0.95rem;
   font-weight: 500;
+}
+
+.popup-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+/* Buton temel stilleri */
+.action-button {
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 500;
+  border: 1px solid transparent;
+}
+
+/* İşleme Al butonu - Durumlara göre stiller */
+.action-button.process.status-completed {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  border-color: #c8e6c9;
+  cursor: not-allowed;
+}
+
+.action-button.process.status-progress {
+  background-color: #e3f2fd;
+  color: #1976d2;
+  border-color: #bbdefb;
+}
+
+.action-button.process.status-progress:hover {
+  background-color: #bbdefb;
+}
+
+.action-button.process.status-canceled {
+  background-color: #ffebee;
+  color: #d32f2f;
+  border-color: #ffcdd2;
+}
+
+.action-button.process.status-canceled:hover {
+  background-color: #ffcdd2;
+}
+
+.action-button.process.status-noshow {
+  background-color: #fff3e0;
+  color: #ed6c02;
+  border-color: #ffe0b2;
+}
+
+.action-button.process.status-noshow:hover {
+  background-color: #ffe0b2;
+}
+
+.action-button.process.status-pending {
+  background-color: #f3f0ff;
+  color: #5B3FD9;
+  border-color: #d6ccff;
+}
+
+.action-button.process.status-pending:hover {
+  background-color: #e2d9ff;
+}
+
+/* İptal butonu - Durumlara göre stiller */
+.action-button.cancel {
+  background-color: #f5f5f5;
+  color: #757575;
+  border-color: #e0e0e0;
+}
+
+.action-button.cancel:hover {
+  background-color: #eeeeee;
+}
+
+/* Tamamlanmış, iptal edilmiş veya no-show durumlarında tüm butonları gizle */
+.action-button.process.status-completed,
+.action-button.process.status-canceled,
+.action-button.process.status-noshow,
+.action-button.cancel.status-completed,
+.action-button.cancel.status-canceled,
+.action-button.cancel.status-noshow {
+  display: none;
+}
+
+/* No-Show durumunda popup-actions container'ını da gizle (boş alan kalmaması için) */
+.popup-actions:has(.action-button.status-noshow) {
+  display: none;
+}
+
+/* Durum renkleri ve stilleri */
+.detail-value.status-completed {
+  color: #2e7d32;
+  background-color: #e8f5e9;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.detail-value.status-progress {
+  color: #1976d2;
+  background-color: #e3f2fd;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.detail-value.status-canceled {
+  color: #d32f2f;
+  background-color: #ffebee;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.detail-value.status-noshow {
+  color: #ed6c02;
+  background-color: #fff3e0;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.detail-value.status-pending {
+  color: #5B3FD9;
+  background-color: #f3f0ff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+/* Fiyat değeri için özel stil */
+.detail-value.price {
+  color: #2e7d32;
+  font-weight: 600;
+}
+
+/* Status renkleri */
+.status-completed {
+  color: #2e7d32 !important;
+}
+
+.status-progress {
+  color: #1976d2 !important;
+}
+
+.status-canceled {
+  color: #d32f2f !important;
+}
+
+.status-noshow {
+  color: #ed6c02 !important;
+}
+
+.status-pending {
+  color: #757575 !important;
 } 

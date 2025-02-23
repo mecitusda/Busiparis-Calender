@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import './Calendar.css';
 import WeekView from './WeekView';
+import Popup from './Popup';
 
 const Calendar = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [appointments, setAppointments] = useState([]);
+  const [selectedAppointment, setSelectedAppointment] = useState(null);
   const daysToShow = 5;
 
   const fetchAppointmentsForDate = async (date) => {
@@ -37,7 +39,6 @@ const Calendar = () => {
   };
 
   const fetchAllVisibleDates = async () => {
-    // Görünen tüm günlerin tarihlerini hesapla
     const dates = [];
     const startDate = new Date(selectedDate);
     startDate.setDate(startDate.getDate() - Math.floor(daysToShow / 2));
@@ -48,23 +49,19 @@ const Calendar = () => {
       dates.push(date);
     }
 
-    // Tüm görünen günler için paralel istek at
     const allAppointments = await Promise.all(
       dates.map(date => fetchAppointmentsForDate(date))
     );
 
-    // Tüm randevuları işle ve birleştir
     const processedAppointments = [];
     allAppointments.forEach(dateProducts => {
       if (dateProducts && dateProducts.length > 0) {
         dateProducts.forEach(product => {
           product.time_range.forEach(timeSlot => {
             timeSlot.customers.forEach(customer => {
-              // UTC tarihini yerel saat dilimine çevir
               const startUTC = new Date(timeSlot.start);
               const endUTC = new Date(timeSlot.end);
               
-              // Yerel saat diliminde yeni tarih oluştur
               const start = new Date(startUTC.getTime() + startUTC.getTimezoneOffset() * 60000);
               const end = new Date(endUTC.getTime() + endUTC.getTimezoneOffset() * 60000);
 
@@ -73,7 +70,9 @@ const Calendar = () => {
                 end: end.toISOString(),
                 title: `${product.product} - ${customer.name} ${customer.surname}`,
                 price: product.price,
-                color: '#5B3FD9'
+                status: timeSlot.status || 'Pending',
+                _id: timeSlot._id,
+                color: getStatusColor(timeSlot.status)
               });
             });
           });
@@ -81,7 +80,6 @@ const Calendar = () => {
       }
     });
 
-    // Randevuları saat sırasına göre sırala
     const sortedAppointments = processedAppointments.sort((a, b) => {
       return new Date(a.start) - new Date(b.start);
     });
@@ -93,6 +91,10 @@ const Calendar = () => {
     const newDate = new Date(selectedDate);
     newDate.setDate(day);
     setSelectedDate(newDate);
+  };
+
+  const handleAppointmentClick = (appointment) => {
+    setSelectedAppointment(appointment);
   };
 
   useEffect(() => {
@@ -110,6 +112,22 @@ const Calendar = () => {
     selectedDate.getMonth(),
     1
   ).getDay();
+
+  const getStatusClass = (appointment) => {
+    switch (appointment.status) {
+      case 'Completed':
+        return 'status-completed';
+      case 'onProgress':
+        return 'status-progress';
+      case 'Canceled':
+        return 'status-canceled';
+      case 'No-Show':
+        return 'status-noshow';
+      case 'Pending':
+      default:
+        return 'status-pending';
+    }
+  };
 
   const renderCalendarDays = () => {
     const days = [];
@@ -160,6 +178,51 @@ const Calendar = () => {
     setSelectedDate(newDate);
   };
 
+  // Status'e göre renk döndüren yardımcı fonksiyon
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'Completed':
+        return '#2e7d32';
+      case 'onProgress':
+        return '#1976d2';
+      case 'Canceled':
+        return '#d32f2f';
+      case 'No-Show':
+        return '#ed6c02';
+      case 'Pending':
+      default:
+        return '#5B3FD9';
+    }
+  };
+
+  const renderAppointmentBlock = (appointments, hour, dates) => {
+    if (!appointments || appointments.length === 0) return null;
+
+    const now = new Date();
+
+    return (
+      <div className="appointment-block">
+        {appointments.map((appointment, index) => {
+          const startTime = new Date(appointment.start);
+          const isPast = startTime < now;
+          
+          return (
+            <button
+              key={index}
+              className={`appointment ${getStatusClass(appointment.status)} ${isPast ? 'past' : ''}`}
+              onClick={() => !isPast && handleAppointmentClick(appointment)}
+            >
+              <span className="appointment-time">
+                {startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              </span>
+              <span className="appointment-title">{appointment.title}</span>
+            </button>
+          );
+        })}
+      </div>
+    );
+  };
+
   return (
     <div className="calendar-layout">
       <div className="calendar-sidebar">
@@ -186,7 +249,14 @@ const Calendar = () => {
       <WeekView 
         selectedDate={selectedDate} 
         appointments={appointments}
+        onAppointmentClick={handleAppointmentClick}
       />
+      {selectedAppointment && (
+        <Popup 
+          appointment={selectedAppointment} 
+          onClose={() => setSelectedAppointment(null)}
+        />
+      )}
     </div>
   );
 };

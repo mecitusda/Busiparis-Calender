@@ -78,7 +78,6 @@
 }
 
 .time-block {
-  background-color: #5B3FD9;
   padding: 4px 8px;
   border-radius: 12px;
   font-size: 12px;
@@ -88,6 +87,41 @@
   top: -10px;
   box-shadow: 0 1px 2px rgba(0,0,0,0.1);
   z-index: 2;
+}
+
+/* Geçmiş saat göstergesi - Kırmızı */
+.time-block.past {
+  background-color: #E53935;
+}
+
+/* Güncel ve gelecek saat göstergesi - Mor renk */
+.time-block:not(.past) {
+  background-color: #5B3FD9;
+}
+
+/* onProgress randevuların saat göstergesi */
+.appointment-block:has(.appointment.status-progress) .time-block {
+  background-color: #1976d2;
+  box-shadow: 0 2px 4px rgba(25, 118, 210, 0.2);
+}
+
+/* Geçmiş onProgress randevuların saat göstergesi */
+.appointment-block.past:has(.appointment.status-progress) .time-block {
+  background-color: #5c6bc0;
+  opacity: 0.95;
+}
+
+/* Hover efektleri */
+.time-block.past:hover {
+  background-color: #d32f2f;
+}
+
+.time-block:not(.past):hover {
+  background-color: #4930b3;
+}
+
+.appointment-block:has(.appointment.status-progress) .time-block:hover {
+  background-color: #1565c0;
 }
 
 .appointment-block {
@@ -112,8 +146,61 @@
   gap: 4px;
   border: 1px solid #D4D4F7;
   margin-top: -4px;
-  height: 100%; /* Parent yüksekliğini doldur */
-  overflow-y: auto; /* İçerik fazla olursa scroll ekle */
+  height: 100%;
+  overflow-y: auto;
+}
+
+/* Geçmiş randevular için farklı arka plan */
+.appointment-block.past .appointment-list {
+  background-color: #f5f5f5;
+  border-color: #e0e0e0;
+}
+
+/* onProgress randevular için özel arka plan */
+.appointment-list:has(.appointment.status-progress) {
+  background-color: #e3f2fd;
+  border-color: #90caf9;
+  box-shadow: 0 2px 4px rgba(25, 118, 210, 0.1);
+}
+
+/* onProgress randevuların butonları için özel stil */
+.appointment.status-progress {
+  background-color: #1976d2;
+  color: rgba(255, 255, 255, 0.95);
+  border: none;
+  box-shadow: 0 2px 4px rgba(25, 118, 210, 0.2);
+}
+
+/* onProgress randevulardaki saat ve başlık yazıları */
+.appointment.status-progress .appointment-time {
+  color: white;
+  font-weight: 600;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.appointment.status-progress .appointment-title {
+  color: white;
+  font-weight: 500;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.appointment.status-progress:hover {
+  background-color: #1565c0;
+}
+
+/* Geçmiş onProgress randevuların butonları için */
+.appointment-block.past .appointment.status-progress {
+  background-color: #5c6bc0;
+  opacity: 0.95;
+}
+
+.appointment-block.past .appointment.status-progress .appointment-time,
+.appointment-block.past .appointment.status-progress .appointment-title {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.appointment-block.past .appointment.status-progress:hover {
+  background-color: #3f51b5;
 }
 
 .appointment {
@@ -152,4 +239,29 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+/* Saat göstergesi için stil */
+.time-indicator {
+  width: 40px;
+  height: 40px;
+  background-color: #5B3FD9;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 500;
+}
+
+/* Geçmiş saat göstergeleri için farklı renk */
+.time-indicator.past {
+  background-color: #9E9E9E; /* Gri ton */
+  opacity: 0.7;
+}
+
+/* Ya da alternatif olarak daha soft bir mor */
+.time-indicator.past {
+  background-color: #B39DDB;
+  opacity: 0.8;
 } 
