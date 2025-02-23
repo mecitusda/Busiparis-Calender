@@ -120,6 +120,35 @@ const Popup = ({ appointment, onClose, onStart, onComplete, onCancel }) => {
     };
   };
 
+  // İşlemi Tamamla butonu için kontrol fonksiyonu
+  const isCompletionActionable = () => {
+    const now = new Date();
+    const startTime = new Date(appointment.start);
+    const tenMinutesAfterStart = new Date(startTime.getTime() + 10 * 60000); // 10 dakika ekleme
+
+    return now >= tenMinutesAfterStart; // 10 dakika geçtiyse true, geçmediyse false
+  };
+
+  // İşlemi Tamamla butonunun durumunu ve mesajını belirleyen fonksiyon
+  const getCompletionButtonState = () => {
+    const now = new Date();
+    const startTime = new Date(appointment.start);
+    const tenMinutesAfterStart = new Date(startTime.getTime() + 10 * 60000);
+
+    if (now < tenMinutesAfterStart) {
+      const remainingMinutes = Math.ceil((tenMinutesAfterStart - now) / 60000);
+      return {
+        disabled: true,
+        message: `İşlem tamamlama için ${remainingMinutes} dakika daha bekleyin`
+      };
+    }
+
+    return {
+      disabled: false,
+      message: null
+    };
+  };
+
   return (
     <>
       <div className="popup-overlay" onClick={onClose}>
@@ -157,45 +186,56 @@ const Popup = ({ appointment, onClose, onStart, onComplete, onCancel }) => {
             </div>
           </div>
 
-          <div className="popup-actions">
-            {appointment.status === 'Pending' && (
-              <>
-                <button 
-                  className="action-button cancel"
-                  onClick={() => handleAction('cancel')}
-                >
-                  İptal Et
-                </button>
-                <div className="button-container">
-                  <button 
-                    className={`action-button process status-pending ${!isAppointmentActionable() ? 'disabled' : ''}`}
-                    onClick={() => handleAction('start')}
-                    disabled={!isAppointmentActionable()}
-                    title={!isAppointmentActionable() ? getPendingButtonState().message : ''}
-                  >
-                    İşleme Al
-                  </button>
-                </div>
-              </>
-            )}
-            {appointment.status === 'onProgress' && (
+          {/* Pending durumu için butonlar */}
+          {appointment.status === 'Pending' && (
+            <div className="popup-buttons">
               <button 
-                className="action-button process status-progress"
+                className="action-button cancel"
+                onClick={() => handleAction('cancel')}
+              >
+                İptal Et
+              </button>
+              <button 
+                className={`action-button process ${!isAppointmentActionable() ? 'disabled' : ''}`}
+                onClick={() => handleAction('start')}
+                disabled={!isAppointmentActionable()}
+                title={!isAppointmentActionable() ? getPendingButtonState().message : ''}
+              >
+                İşleme Al
+              </button>
+            </div>
+          )}
+
+          {/* onProgress durumu için butonlar */}
+          {appointment.status === 'onProgress' && (
+            <div className="popup-buttons">
+              <button 
+                className="action-button cancel"
+                onClick={() => handleAction('cancel')}
+              >
+                İptal Et
+              </button>
+              <button 
+                className={`action-button complete ${!isCompletionActionable() ? 'disabled' : ''}`}
                 onClick={() => handleAction('complete')}
+                disabled={!isCompletionActionable()}
+                title={!isCompletionActionable() ? getCompletionButtonState().message : ''}
               >
                 İşlemi Tamamla
               </button>
-            )}
-            {(appointment.status === 'Completed' || 
-              appointment.status === 'Canceled' || 
-              appointment.status === 'No-Show') && (
-              <div className="status-message">
-                {appointment.status === 'Completed' && "Bu randevu tamamlanmıştır."}
-                {appointment.status === 'Canceled' && "Bu randevu iptal edilmiştir."}
-                {appointment.status === 'No-Show' && "Müşteri randevuya gelmemiştir."}
-              </div>
-            )}
-          </div>
+            </div>
+          )}
+
+          {/* Tamamlanmış veya iptal edilmiş randevular için mesaj */}
+          {(appointment.status === 'Completed' || 
+            appointment.status === 'Canceled' || 
+            appointment.status === 'No-Show') && (
+            <div className="status-message">
+              {appointment.status === 'Completed' && "Bu randevu tamamlanmıştır."}
+              {appointment.status === 'Canceled' && "Bu randevu iptal edilmiştir."}
+              {appointment.status === 'No-Show' && "Müşteri randevuya gelmemiştir."}
+            </div>
+          )}
         </div>
       </div>
 
