@@ -1,7 +1,7 @@
 import React from 'react';
 import './Popup.css';
 
-const Popup = ({ appointment, onClose }) => {
+const Popup = ({ appointment, onClose, onUpdate }) => {
   const startTime = new Date(appointment.start);
   const endTime = new Date(appointment.end);
 
@@ -27,40 +27,68 @@ const Popup = ({ appointment, onClose }) => {
       const response = await fetch(`https://skytr-yazilim-skytr-yazilim-busiparis-re3a.onrender.com/service/product/rezervation/status/${appointment._id}`, {
         method: 'PATCH',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           "status": "onProgress"
         })
       });
 
-      if (!response.ok) {
-        throw new Error('İşlem başarısız oldu');
+      if (response.ok) {
+        onUpdate(); // Takvimi yenile
+        onClose(); // Popup'ı kapat
+      } else {
+        console.error('İşlem başarısız oldu');
       }
-
-      const data = await response.json();
-      console.log('Randevu işleme alındı:', data);
-      
-      // Başarılı işlem sonrası popup'ı kapat
-      onClose();
-      
-      // İsteğe bağlı: Başarılı işlem bildirimi göster
-      // showNotification('Randevu başarıyla işleme alındı');
-      
-      // İsteğe bağlı: Takvimi yenile
-      // refreshCalendar();
-
     } catch (error) {
-      console.error('İşlem sırasında hata oluştu:', error);
-      // İsteğe bağlı: Hata bildirimi göster
-      // showError('İşlem sırasında bir hata oluştu');
+      console.error('İstek gönderilirken hata oluştu:', error);
     }
   };
 
-  const handleCancel = () => {
-    // İptal etme fonksiyonu buraya gelecek
-    console.log('Randevu iptal edildi:', appointment);
-    onClose();
+  const handleCancel = async () => {
+    try {
+      const response = await fetch(`https://skytr-yazilim-skytr-yazilim-busiparis-re3a.onrender.com/service/product/rezervation/status/${appointment._id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          "status": "Canceled"
+        })
+      });
+
+      if (response.ok) {
+        onUpdate(); // Takvimi yenile
+        onClose(); // Popup'ı kapat
+      } else {
+        console.error('İptal işlemi başarısız oldu');
+      }
+    } catch (error) {
+      console.error('İstek gönderilirken hata oluştu:', error);
+    }
+  };
+
+  const handleComplete = async () => {
+    try {
+      const response = await fetch(`https://skytr-yazilim-skytr-yazilim-busiparis-re3a.onrender.com/service/product/rezervation/status/${appointment._id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          "status": "Completed"
+        })
+      });
+
+      if (response.ok) {
+        onUpdate();
+        onClose();
+      } else {
+        console.error('İşlem tamamlama başarısız oldu');
+      }
+    } catch (error) {
+      console.error('İstek gönderilirken hata oluştu:', error);
+    }
   };
 
   return (
@@ -100,12 +128,38 @@ const Popup = ({ appointment, onClose }) => {
         </div>
 
         <div className="popup-actions">
-          <button className={`action-button cancel ${getStatusClass()}`} onClick={handleCancel}>
-            İptal Et
-          </button>
-          <button className={`action-button process ${getStatusClass()}`} onClick={handleProcess}>
-            {appointment.status === 'onProgress' ? 'İşlemi Tamamla' : 'İşleme Al'}
-          </button>
+          {appointment.status === 'Pending' && (
+            <>
+              <button 
+                className="action-button cancel"
+                onClick={handleCancel}
+              >
+                İptal Et
+              </button>
+              <button 
+                className="action-button process status-pending"
+                onClick={handleProcess}
+              >
+                İşleme Al
+              </button>
+            </>
+          )}
+          {appointment.status === 'onProgress' && (
+            <>
+              <button 
+                className="action-button cancel"
+                onClick={handleCancel}
+              >
+                İptal Et
+              </button>
+              <button 
+                className="action-button process status-progress"
+                onClick={handleComplete}
+              >
+                İşlemi Tamamla
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>

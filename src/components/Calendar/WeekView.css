@@ -91,7 +91,7 @@
   top: -10px;
   box-shadow: 0 1px 2px rgba(0,0,0,0.1);
   z-index: 2;
-  background-color: #5B3FD9;  /* Mor renk */
+  background-color: #6E42E5;  /* Yeni mor renk - resimde gösterilen saat göstergesi rengi */
   font-weight: 600;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
@@ -99,17 +99,20 @@
 /* Geçmiş saat göstergesi - Kırmızı */
 .time-block.past {
   background-color: #E53935;
+  opacity: 0.7;
+  filter: brightness(0.85);  /* Hafif karartma efekti */
+  transition: all 0.2s ease;
 }
 
 /* Güncel ve gelecek saat göstergesi - Mor renk */
 .time-block:not(.past) {
-  background-color: #5B3FD9;
+  background-color: #6E42E5;  /* Aynı yeni mor renk */
 }
 
 /* onProgress randevuların saat göstergesi */
 .appointment-block:has(.appointment.status-progress) .time-block {
-  background-color: #1976d2;
-  box-shadow: 0 2px 4px rgba(25, 118, 210, 0.2);
+  background-color: #2196F3;  /* Aynı mavi renk */
+  box-shadow: 0 2px 4px rgba(33, 150, 243, 0.2);
 }
 
 /* Geçmiş onProgress randevuların saat göstergesi */
@@ -121,10 +124,13 @@
 /* Hover efektleri */
 .time-block.past:hover {
   background-color: #d32f2f;
+  opacity: 0.7;
+  filter: brightness(0.85);
+  transform: none;  /* Hover efektini devre dışı bırak */
 }
 
 .time-block:not(.past):hover {
-  background-color: #4930b3;
+  background-color: #5935C8;  /* Hover için daha koyu tonu */
 }
 
 .appointment-block:has(.appointment.status-progress) .time-block:hover {
@@ -168,40 +174,47 @@
 
 /* Şu anki zaman dilimi için konteyner */
 .appointment-block:not(.past) .appointment-list.current-hour {
-    background-color: #1a3f5f;
+    background-color: #1a3f5f;  /* Koyu mavi arka plan */
     border-color: #234863;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+/* Şu anki zaman diliminin saat göstergesi */
+.time-block.current-hour {
+    background-color: #E53935;  /* Kırmızı renk */
+    box-shadow: 0 2px 4px rgba(229, 57, 53, 0.2);
+}
+
+/* Hover durumu için */
+.time-block.current-hour:hover {
+    background-color: #d32f2f;  /* Biraz daha koyu kırmızı */
+}
+
 /* onProgress randevuların butonları için özel stil */
 .appointment.status-progress {
-  background-color: #1976d2;
-  color: rgba(255, 255, 255, 0.95);
-  border: none;
-  box-shadow: 0 2px 4px rgba(25, 118, 210, 0.2);
+    background-color: #2196F3;  /* Mavi renk */
+    color: white;
+    border: none;
+    box-shadow: 0 2px 4px rgba(33, 150, 243, 0.3);
 }
 
 /* onProgress randevulardaki saat ve başlık yazıları */
-.appointment.status-progress .appointment-time {
-  color: white;
-  font-weight: 600;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
-}
-
+.appointment.status-progress .appointment-time,
 .appointment.status-progress .appointment-title {
-  color: white;
-  font-weight: 500;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+    color: white;
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .appointment.status-progress:hover {
-  background-color: #1565c0;
+    background-color: #1E88E5;  /* Hover için daha koyu mavi */
 }
 
 /* Geçmiş onProgress randevuların butonları için */
 .appointment-block.past .appointment.status-progress {
-  background-color: #5c6bc0;
-  opacity: 0.95;
+    background-color: rgba(33, 150, 243, 0.7);
+    opacity: 0.7;
+    filter: brightness(0.85);
 }
 
 .appointment-block.past .appointment.status-progress .appointment-time,
@@ -239,11 +252,12 @@
 }
 
 .appointment:hover {
-  background-color: #4930b3;  /* Saat göstergesi hover rengi ile aynı */
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .appointment:active {
-  transform: scale(0.98);
+  transform: translateY(0);
 }
 
 /* Saat göstergesi için stil */
@@ -303,7 +317,9 @@
 }
 
 .appointment.status-canceled:hover {
-    background-color: #d32f2f;  /* Hover durumunda daha koyu kırmızı */
+    background-color: #d32f2f;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(244, 67, 54, 0.4);
 }
 
 .appointment.status-canceled .appointment-time,
@@ -311,37 +327,36 @@
     color: white;
 }
 
+/* No-Show randevular için stil */
 .appointment.status-noshow {
     background-color: #ff9800;  /* Turuncu arka plan */
     color: white;
     border: none;
     box-shadow: 0 2px 4px rgba(255, 152, 0, 0.2);
+    transition: all 0.2s ease;  /* Geçiş efekti */
 }
 
 .appointment.status-noshow:hover {
-    background-color: #f57c00;  /* Hover durumunda daha koyu turuncu */
+    background-color: #f57c00;  /* Daha koyu turuncu */
+    transform: translateY(-1px);  /* Yukarı kalkma efekti */
+    box-shadow: 0 4px 8px rgba(255, 152, 0, 0.4);  /* Daha belirgin gölge */
+}
+
+.appointment.status-noshow:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(255, 152, 0, 0.2);
 }
 
 .appointment.status-noshow .appointment-time,
 .appointment.status-noshow .appointment-title {
     color: white;
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
-.appointment.status-completed {
-    background-color: #2e7d32;  /* Koyu yeşil arka plan */
-    color: white;
-    border: none;
-    box-shadow: 0 2px 4px rgba(46, 125, 50, 0.2);
-}
-
-.appointment.status-completed:hover {
-    background-color: #1b5e20;  /* Hover durumunda daha koyu yeşil */
-}
-
-.appointment.status-completed .appointment-time,
-.appointment.status-completed .appointment-title {
-    color: white;
-    font-weight: 500;
+/* Geçmiş No-Show randevular için */
+.appointment-block.past .appointment.status-noshow {
+    opacity: 0.7;
 }
 
 /* Scrollbar stilleri */
@@ -364,32 +379,74 @@
 
 /* Pending randevular için stil */
 .appointment.status-pending {
-    background-color: #5B3FD9;  /* Aynı mor renk */
+    background-color: #7B4BFF;  /* Ana renk */
     color: white;
     border: none;
-    box-shadow: 0 2px 4px rgba(91, 63, 217, 0.3);
+    box-shadow: 0 2px 4px rgba(123, 75, 255, 0.3);
+    transition: all 0.2s ease;  /* Geçiş efekti ekledik */
 }
 
 .appointment.status-pending:hover {
-    background-color: #4930b3;
+    background-color: #6133FF;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(123, 75, 255, 0.4);
 }
 
-.appointment.status-pending .appointment-time,
-.appointment.status-pending .appointment-title {
-    color: white;
-    font-weight: 600;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);  /* Saat göstergesiyle aynı gölge */
+.appointment.status-pending:active {
+    transform: translateY(0);  /* Tıklama efekti */
+    box-shadow: 0 2px 4px rgba(123, 75, 255, 0.3);
 }
 
 /* Geçmiş pending randevular için */
 .appointment-block.past .appointment.status-pending {
-    background-color: rgba(91, 63, 217, 0.7);  /* Biraz daha soluk ama hala okunabilir */
+    background-color: rgba(123, 75, 255, 0.7);
     opacity: 0.9;
 }
 
-.appointment-block.past .appointment.status-pending .appointment-time,
-.appointment-block.past .appointment.status-pending .appointment-title {
+/* Pending randevuların yazı stilleri */
+.appointment.status-pending .appointment-time,
+.appointment.status-pending .appointment-title {
     color: white;
-    opacity: 0.95;
+    font-weight: 600;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Geçmiş randevular için hover efektini devre dışı bırak */
+.appointment-block.past .appointment:hover {
+    transform: none;
+    box-shadow: none;
+    opacity: 0.7;
+}
+
+/* Tüm geçmiş randevular için genel stil */
+.appointment-block.past .appointment {
+    opacity: 0.7;
+    filter: brightness(0.85);  /* Hafif karartma efekti */
+    transition: all 0.2s ease;
+}
+
+/* Geçmiş randevular için hover efektini devre dışı bırak ve karartmayı koru */
+.appointment-block.past .appointment:hover {
+    transform: none;
+    box-shadow: none;
+    opacity: 0.7;
+    filter: brightness(0.85);
+}
+
+/* Geçmiş randevuların yazıları için stil */
+.appointment-block.past .appointment .appointment-time,
+.appointment-block.past .appointment .appointment-title {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* Geçmiş randevuların konteynırı için stil */
+.appointment-block.past .appointment-list {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.15);
+    opacity: 0.95;
+}
+
+/* Geçmiş saat göstergesinin yazısı */
+.time-block.past {
+    color: rgba(255, 255, 255, 0.9);
 } 

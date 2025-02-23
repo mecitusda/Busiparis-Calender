@@ -97,6 +97,10 @@ const Calendar = () => {
     setSelectedAppointment(appointment);
   };
 
+  const handleUpdate = () => {
+    fetchAllVisibleDates();
+  };
+
   useEffect(() => {
     fetchAllVisibleDates();
   }, [selectedDate]);
@@ -253,8 +257,9 @@ const Calendar = () => {
       />
       {selectedAppointment && (
         <Popup 
-          appointment={selectedAppointment} 
+          appointment={selectedAppointment}
           onClose={() => setSelectedAppointment(null)}
+          onUpdate={handleUpdate}
         />
       )}
     </div>

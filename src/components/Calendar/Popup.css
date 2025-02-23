@@ -111,13 +111,19 @@
 }
 
 .action-button.process.status-progress {
-  background-color: #e3f2fd;
-  color: #1976d2;
-  border-color: #bbdefb;
+  background-color: #6E42E5;  /* Aynı mor renk */
+  color: white !important;
+  border: none;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
 }
 
 .action-button.process.status-progress:hover {
-  background-color: #bbdefb;
+  background-color: #5935C8;  /* Hover'da biraz daha koyu mor */
+}
+
+.action-button.process.status-progress:active {
+  background-color: #4F2DB8;  /* Tıklandığında en koyu mor */
 }
 
 .action-button.process.status-canceled {
@@ -141,13 +147,21 @@
 }
 
 .action-button.process.status-pending {
-  background-color: #f3f0ff;
-  color: #5B3FD9;
-  border-color: #d6ccff;
+  background-color: #6E42E5;  /* Resimdeki mor renk */
+  color: white !important;  /* Beyaz yazı rengi ve !important ile override */
+  border: none;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
 }
 
 .action-button.process.status-pending:hover {
-  background-color: #e2d9ff;
+  background-color: #5935C8;  /* Hover'da biraz daha koyu */
+  color: white !important;  /* Hover'da da beyaz kalsın */
+}
+
+.action-button.process.status-pending:active {
+  background-color: #4F2DB8;  /* Tıklandığında en koyu */
+  color: white !important;
 }
 
 /* İptal butonu - Durumlara göre stiller */
@@ -186,8 +200,8 @@
 }
 
 .detail-value.status-progress {
-  color: #1976d2;
-  background-color: #e3f2fd;
+  color: #6E42E5;  /* Mor renk */
+  background-color: rgba(110, 66, 229, 0.1);  /* Hafif mor arka plan */
   padding: 4px 8px;
   border-radius: 4px;
   font-weight: 500;
@@ -242,4 +256,28 @@
 
 .status-pending {
   color: #757575 !important;
+}
+
+/* İşleme Al butonu için stil */
+.popup-button.process {
+    background-color: #7B4BFF;  /* Belirgin mor renk */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    box-shadow: 0 2px 4px rgba(123, 75, 255, 0.3);
+    transition: all 0.2s ease;
+}
+
+.popup-button.process:hover {
+    background-color: #6133FF;  /* Hover için daha koyu mor */
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(123, 75, 255, 0.4);
+}
+
+.popup-button.process:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(123, 75, 255, 0.3);
 } 
