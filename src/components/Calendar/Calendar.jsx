@@ -101,6 +101,93 @@ const Calendar = () => {
     fetchAllVisibleDates();
   };
 
+  const handleAppointmentStart = async (appointment) => {
+    try {
+      const response = await fetch(`https://skytr-yazilim-skytr-yazilim-busiparis-re3a.onrender.com/service/product/rezervation/status/${appointment._id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          status: 'onProgress'
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const updatedAppointments = appointments.map(app => {
+        if (app._id === appointment._id) {
+          return { ...app, status: 'onProgress' };
+        }
+        return app;
+      });
+      setAppointments(updatedAppointments);
+      
+    } catch (error) {
+      console.error('Error updating appointment status:', error);
+    }
+  };
+
+  const handleAppointmentComplete = async (appointment) => {
+    try {
+      const response = await fetch(`https://skytr-yazilim-skytr-yazilim-busiparis-re3a.onrender.com/service/product/rezervation/status/${appointment._id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          status: 'Completed'
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const updatedAppointments = appointments.map(app => {
+        if (app._id === appointment._id) {
+          return { ...app, status: 'Completed' };
+        }
+        return app;
+      });
+      setAppointments(updatedAppointments);
+      
+    } catch (error) {
+      console.error('Error updating appointment status:', error);
+    }
+  };
+
+  const handleAppointmentCancel = async (appointment) => {
+    try {
+      const response = await fetch(`https://skytr-yazilim-skytr-yazilim-busiparis-re3a.onrender.com/service/product/rezervation/status/${appointment._id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          status: 'Canceled'
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const updatedAppointments = appointments.map(app => {
+        if (app._id === appointment._id) {
+          return { ...app, status: 'Canceled' };
+        }
+        return app;
+      });
+      setAppointments(updatedAppointments);
+      
+    } catch (error) {
+      console.error('Error updating appointment status:', error);
+    }
+  };
+
   useEffect(() => {
     fetchAllVisibleDates();
   }, [selectedDate]);
@@ -256,10 +343,12 @@ const Calendar = () => {
         onAppointmentClick={handleAppointmentClick}
       />
       {selectedAppointment && (
-        <Popup 
+        <Popup
           appointment={selectedAppointment}
           onClose={() => setSelectedAppointment(null)}
-          onUpdate={handleUpdate}
+          onStart={handleAppointmentStart}
+          onComplete={handleAppointmentComplete}
+          onCancel={handleAppointmentCancel}
         />
       )}
     </div>
