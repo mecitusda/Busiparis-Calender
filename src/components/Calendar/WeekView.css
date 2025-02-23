@@ -2,14 +2,16 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  background-color: white;
+  background-color: #1a1a1a;
   height: 100%;
+  color: #e0e0e0;
 }
 
 .week-header {
   display: flex;
   padding: 10px 0;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #333;
+  background-color: #242424;
 }
 
 .time-gutter-header {
@@ -22,12 +24,12 @@
   padding: 10px;
   text-align: center;
   font-weight: 500;
-  color: #666;
+  color: #e0e0e0;
   font-size: 14px;
 }
 
 .day-column-header.selected {
-  color: #1a73e8;
+  color: #90caf9;
 }
 
 .time-grid {
@@ -35,16 +37,17 @@
   display: flex;
   overflow-y: auto;
   position: relative;
+  background-color: #1a1a1a;
 }
 
 .time-gutter {
   width: 50px;
   flex-shrink: 0;
-  border-right: 1px solid #eee;
+  border-right: 1px solid #333;
 }
 
 .time-slot {
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #333;
   position: relative;
   min-height: 60px;
   transition: height 0.3s ease;
@@ -55,9 +58,10 @@
   height: 60px;
   padding: 0 8px;
   text-align: right;
-  color: #666;
+  color: #999;
   font-size: 12px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #333;
+  background-color: #1a1a1a;
   position: sticky;
   top: 0;
   display: flex;
@@ -72,9 +76,9 @@
 
 .day-column {
   flex: 1;
-  border-right: 1px solid #eee;
+  border-right: 1px solid #333;
   position: relative;
-  min-height: 780px;
+  min-height: 1020px; /* 17 saat * 60px = 1020px */
 }
 
 .time-block {
@@ -87,6 +91,9 @@
   top: -10px;
   box-shadow: 0 1px 2px rgba(0,0,0,0.1);
   z-index: 2;
+  background-color: #5B3FD9;  /* Mor renk */
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 /* Geçmiş saat göstergesi - Kırmızı */
@@ -137,30 +144,33 @@
   transition: height 0.3s ease; /* Yükseklik değişimini animasyonlu yap */
 }
 
+/* Varsayılan (gelecek) randevular için konteyner */
 .appointment-list {
-  background-color: #E8E8FD;
-  border-radius: 8px;
-  padding: 4px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  border: 1px solid #D4D4F7;
-  margin-top: -4px;
-  height: 100%;
-  overflow-y: auto;
+    background-color: rgba(91, 63, 217, 0.15);  /* Mor tonunda yarı saydam */
+    border-radius: 8px;
+    padding: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    border: 1px solid rgba(91, 63, 217, 0.3);  /* Mor tonunda border */
+    margin-top: -4px;
+    height: 100%;
+    overflow-y: auto;
+    box-shadow: 0 2px 4px rgba(91, 63, 217, 0.1);  /* Hafif mor gölge */
 }
 
-/* Geçmiş randevular için farklı arka plan */
+/* Geçmiş zaman dilimi için konteyner */
 .appointment-block.past .appointment-list {
-  background-color: #f5f5f5;
-  border-color: #e0e0e0;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.15);
+    opacity: 1;
 }
 
-/* onProgress randevular için özel arka plan */
-.appointment-list:has(.appointment.status-progress) {
-  background-color: #e3f2fd;
-  border-color: #90caf9;
-  box-shadow: 0 2px 4px rgba(25, 118, 210, 0.1);
+/* Şu anki zaman dilimi için konteyner */
+.appointment-block:not(.past) .appointment-list.current-hour {
+    background-color: #1a3f5f;
+    border-color: #234863;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 /* onProgress randevuların butonları için özel stil */
@@ -207,8 +217,8 @@
   width: 100%;
   padding: 6px 8px;
   border: none;
-  border-radius: 4px;
-  font-size: 0.85rem;
+  border-radius: 12px;  /* Saat göstergesi gibi yuvarlak köşeler */
+  font-size: 12px;  /* Saat göstergesi ile aynı yazı boyutu */
   color: white;
   background-color: #5B3FD9;
   cursor: pointer;
@@ -221,24 +231,19 @@
   height: 40px;
 }
 
+.appointment-time,
+.appointment-title {
+  color: white;
+  font-weight: 600;  /* Saat göstergesi ile aynı kalınlık */
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);  /* Saat göstergesi ile aynı gölge */
+}
+
 .appointment:hover {
-  filter: brightness(1.1);
+  background-color: #4930b3;  /* Saat göstergesi hover rengi ile aynı */
 }
 
 .appointment:active {
   transform: scale(0.98);
-}
-
-.appointment-time {
-  font-weight: bold;
-  min-width: 45px;
-}
-
-.appointment-title {
-  flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 /* Saat göstergesi için stil */
@@ -264,4 +269,127 @@
 .time-indicator.past {
   background-color: #B39DDB;
   opacity: 0.8;
+}
+
+.event.cancelled {
+  background-color: #ffebee;
+  border: 1px solid #ffcdd2;
+  color: #c62828;
+  opacity: 0.8;
+}
+
+.appointment.cancelled {
+  background-color: #ef5350;  /* Kırmızı arka plan */
+  color: white;
+  border: 1px solid #e53935;
+  opacity: 0.9;
+}
+
+.appointment.cancelled:hover {
+  background-color: #e53935;  /* Hover durumunda biraz daha koyu kırmızı */
+  opacity: 1;
+}
+
+.appointment.cancelled .appointment-time,
+.appointment.cancelled .appointment-title {
+  color: white;
+}
+
+.appointment.status-canceled {
+    background-color: #f44336;  /* Kırmızı arka plan */
+    color: white;
+    border: none;
+    box-shadow: 0 2px 4px rgba(244, 67, 54, 0.2);
+}
+
+.appointment.status-canceled:hover {
+    background-color: #d32f2f;  /* Hover durumunda daha koyu kırmızı */
+}
+
+.appointment.status-canceled .appointment-time,
+.appointment.status-canceled .appointment-title {
+    color: white;
+}
+
+.appointment.status-noshow {
+    background-color: #ff9800;  /* Turuncu arka plan */
+    color: white;
+    border: none;
+    box-shadow: 0 2px 4px rgba(255, 152, 0, 0.2);
+}
+
+.appointment.status-noshow:hover {
+    background-color: #f57c00;  /* Hover durumunda daha koyu turuncu */
+}
+
+.appointment.status-noshow .appointment-time,
+.appointment.status-noshow .appointment-title {
+    color: white;
+}
+
+.appointment.status-completed {
+    background-color: #2e7d32;  /* Koyu yeşil arka plan */
+    color: white;
+    border: none;
+    box-shadow: 0 2px 4px rgba(46, 125, 50, 0.2);
+}
+
+.appointment.status-completed:hover {
+    background-color: #1b5e20;  /* Hover durumunda daha koyu yeşil */
+}
+
+.appointment.status-completed .appointment-time,
+.appointment.status-completed .appointment-title {
+    color: white;
+    font-weight: 500;
+}
+
+/* Scrollbar stilleri */
+.time-grid::-webkit-scrollbar {
+    width: 8px;
+}
+
+.time-grid::-webkit-scrollbar-track {
+    background: #1a1a1a;
+}
+
+.time-grid::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 4px;
+}
+
+.time-grid::-webkit-scrollbar-thumb:hover {
+    background: #444;
+}
+
+/* Pending randevular için stil */
+.appointment.status-pending {
+    background-color: #5B3FD9;  /* Aynı mor renk */
+    color: white;
+    border: none;
+    box-shadow: 0 2px 4px rgba(91, 63, 217, 0.3);
+}
+
+.appointment.status-pending:hover {
+    background-color: #4930b3;
+}
+
+.appointment.status-pending .appointment-time,
+.appointment.status-pending .appointment-title {
+    color: white;
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);  /* Saat göstergesiyle aynı gölge */
+}
+
+/* Geçmiş pending randevular için */
+.appointment-block.past .appointment.status-pending {
+    background-color: rgba(91, 63, 217, 0.7);  /* Biraz daha soluk ama hala okunabilir */
+    opacity: 0.9;
+}
+
+.appointment-block.past .appointment.status-pending .appointment-time,
+.appointment-block.past .appointment.status-pending .appointment-title {
+    color: white;
+    opacity: 0.95;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 } 

@@ -6,7 +6,8 @@ const WeekView = ({ selectedDate, appointments, onAppointmentClick }) => {
   const [selectedAppointment, setSelectedAppointment] = useState(null);
 
   const daysToShow = 5;
-  const hours = Array.from({ length: 13 }, (_, i) => i + 8); // 8 AM to 8 PM
+  // 8'den 24'e kadar olan saatleri oluştur (17 saat)
+  const hours = Array.from({ length: 17 }, (_, i) => i + 8);
 
   const getDayDates = () => {
     const dates = [];
@@ -50,14 +51,12 @@ const WeekView = ({ selectedDate, appointments, onAppointmentClick }) => {
 
     const now = new Date();
     const currentHour = now.getHours();
-    const currentDate = new Date().setHours(0,0,0,0); // Bugünün tarihini saat olmadan al
-
-    // Kontrol edilecek tarihi doğrudan parametre olarak gelen date'i kullan
+    const currentDate = new Date().setHours(0,0,0,0);
     const checkDate = new Date(date);
-    const dayDate = checkDate.setHours(0,0,0,0); // Saat olmadan tarih
+    const dayDate = checkDate.setHours(0,0,0,0);
 
-    // Geçmiş kontrolü: Ya tarih geçmişte ya da aynı gün ve saat geçmişte
     const isPast = dayDate < currentDate || (dayDate === currentDate && hour < currentHour);
+    const isCurrentHour = dayDate === currentDate && hour === currentHour;
 
     // Önceki saatlerin toplam yüksekliğini hesapla
     let topPosition = 0;
@@ -75,7 +74,7 @@ const WeekView = ({ selectedDate, appointments, onAppointmentClick }) => {
         <div className={`time-block ${isPast ? 'past' : ''}`}>
           {`${hour.toString().padStart(2, '0')}:00`}
         </div>
-        <div className="appointment-list">
+        <div className={`appointment-list ${isCurrentHour ? 'current-hour' : ''}`}>
           {appointments.map((appointment, index) => {
             const startTime = new Date(appointment.start);
             const formattedTime = `${startTime.getHours().toString().padStart(2, '0')}:${startTime.getMinutes().toString().padStart(2, '0')}`;
@@ -83,7 +82,7 @@ const WeekView = ({ selectedDate, appointments, onAppointmentClick }) => {
             return (
               <button
                 key={index}
-                className={`appointment ${getStatusClass(appointment.status)}`}
+                className={`appointment ${getStatusClass(appointment.status)} ${appointment.cancelled ? 'cancelled' : ''}`}
                 onClick={() => handleAppointmentClick(appointment)}
               >
                 <span className="appointment-time">{formattedTime}</span>
