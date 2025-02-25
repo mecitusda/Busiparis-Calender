@@ -158,8 +158,13 @@ const Popup = ({ appointment, onClose, onStart, onComplete, onCancel }) => {
           <div className="popup-header">
             <h3>{appointment.title}</h3>
             <div className="popup-time">
-              {startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - 
-              {endTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              <span>
+                {startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - 
+                {endTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              </span>
+              <button className="call-button">
+                <i className="fas fa-phone"></i> Müşteriyi Ara
+              </button>
             </div>
           </div>
 
@@ -182,6 +187,12 @@ const Popup = ({ appointment, onClose, onStart, onComplete, onCancel }) => {
               <span className="detail-label">Durum:</span>
               <span className={`detail-value ${getStatusClass()}`}>
                 {appointment.status}
+              </span>
+            </div>
+            <div className="detail-item">
+              <span className="detail-label">Telefon:</span>
+              <span className="detail-value phone">
+                0533 *** ** 89
               </span>
             </div>
           </div>
