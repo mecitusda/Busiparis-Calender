@@ -317,6 +317,10 @@ const Calendar = () => {
   return (
     <div className="calendar-layout">
       <div className="calendar-sidebar">
+        <div className="logo-container">
+          <img src="/skytr-logo.avif" alt="SKYTR" className="logo" />
+          <span className="logo-text">Calendar</span>
+        </div>
         <div className="calendar-header">
           <div className="calendar-nav">
             <div className="calendar-nav-buttons">
